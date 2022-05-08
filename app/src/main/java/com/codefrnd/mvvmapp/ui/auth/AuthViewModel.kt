@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.codefrnd.mvvmapp.data.repository.UserRepository
 import com.codefrnd.mvvmapp.uitl.ApiException
 import com.codefrnd.mvvmapp.uitl.Coroutines
+import com.codefrnd.mvvmapp.uitl.NoInternetException
 import java.net.ConnectException
 
 class AuthViewModel(
@@ -47,6 +48,8 @@ class AuthViewModel(
             } catch (e: ApiException) {
                 authListener?.onFailure(e.message!!)
             } catch (e: ConnectException) {
+                authListener?.onFailure(e.message!!)
+            } catch (e : NoInternetException) {
                 authListener?.onFailure(e.message!!)
             }
         }

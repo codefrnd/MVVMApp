@@ -11,6 +11,7 @@ import com.codefrnd.mvvmapp.R
 import com.codefrnd.mvvmapp.data.db.AppDB
 import com.codefrnd.mvvmapp.data.db.entities.User
 import com.codefrnd.mvvmapp.data.network.MyApi
+import com.codefrnd.mvvmapp.data.network.NetworkConnectionInterceptor
 import com.codefrnd.mvvmapp.data.repository.UserRepository
 import com.codefrnd.mvvmapp.databinding.ActivityLoginBinding
 import com.codefrnd.mvvmapp.ui.home.HomeActivity
@@ -24,7 +25,9 @@ class LoginActivity : AppCompatActivity(), AuthListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val api = MyApi()
+        // BAD PRACTICE
+        val networkConnectionInterceptor = NetworkConnectionInterceptor(this)
+        val api = MyApi(networkConnectionInterceptor)
         val db = AppDB(this)
         val repository = UserRepository(api, db)
         val factory = AuthViewModelFactory(repository)
@@ -37,7 +40,7 @@ class LoginActivity : AppCompatActivity(), AuthListener {
 
         viewModel.getLoggedInUser().observe(this, Observer { user ->
             if (user != null) {
-                Intent(this , HomeActivity::class.java).also {
+                Intent(this, HomeActivity::class.java).also {
                     it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(it)
                 }
