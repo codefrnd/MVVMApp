@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    android:label="Quotes"
     app:startDestination="@id/profileFragment">
 
     <fragment
@@ -13,6 +14,6 @@
     <fragment
         android:id="@+id/quotesFragment"
         android:name="com.codefrnd.mvvmapp.ui.home.quotes.QuotesFragment"
-        android:label="quotes_fragment"
+        android:label="Quotes"
         tools:layout="@layout/quotes_fragment" />
 </navigation>

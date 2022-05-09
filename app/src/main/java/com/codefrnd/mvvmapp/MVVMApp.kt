@@ -4,6 +4,7 @@ import android.app.Application
 import com.codefrnd.mvvmapp.data.db.AppDB
 import com.codefrnd.mvvmapp.data.network.MyApi
 import com.codefrnd.mvvmapp.data.network.NetworkConnectionInterceptor
+import com.codefrnd.mvvmapp.data.preferences.PreferenceProvider
 import com.codefrnd.mvvmapp.data.repository.QuoteRepository
 import com.codefrnd.mvvmapp.data.repository.UserRepository
 import com.codefrnd.mvvmapp.ui.auth.AuthViewModel
@@ -26,8 +27,9 @@ class MVVMApp : Application(), KodeinAware {
         bind() from singleton { NetworkConnectionInterceptor(instance()) }
         bind() from singleton { MyApi(instance()) }
         bind() from singleton { AppDB(instance()) }
+        bind() from singleton { PreferenceProvider(instance()) }
         bind() from singleton { UserRepository(instance(), instance()) }
-        bind() from singleton { QuoteRepository(instance(), instance()) }
+        bind() from singleton { QuoteRepository(instance(), instance(), instance()) }
         bind() from provider { AuthViewModelFactory(instance()) }
         bind() from provider { ProfileViewModelFactory(instance()) }
         bind() from provider { QuotesViewModelFactory(instance()) }
