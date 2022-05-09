@@ -14,7 +14,7 @@ class HomeActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val navController = Navigation.findNavController(this, R.id.fragmentContainerView)
+        val navController = Navigation.findNavController(this, R.id.fragment)
         NavigationUI.setupWithNavController(nav_view, navController)
         NavigationUI.setupActionBarWithNavController(this, navController, drawer_lyt)
     }
@@ -23,7 +23,7 @@ class HomeActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(
             Navigation.findNavController(
                 this,
-                R.id.fragmentContainerView
+                R.id.fragment
             ),
             drawer_lyt
         )

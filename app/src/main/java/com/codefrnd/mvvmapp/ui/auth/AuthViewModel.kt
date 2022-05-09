@@ -75,10 +75,14 @@ class AuthViewModel(
         }
 
         val currTime = System.currentTimeMillis().toString()
-        var demoUser = User(name, email, password, currTime, currTime, currTime)
+        var demoUser = User(1, name, email, password, currTime, currTime, currTime)
 
         Coroutines.main {
-            try {
+            authListener?.onSuccess(demoUser)
+            repository.saveUser(demoUser)
+            return@main
+
+            /*try {
                 val authResponse = repository.userSignUp(name!!, email!!, password!!)
                 authResponse.user?.let {
                     authListener?.onSuccess(it)
@@ -92,7 +96,7 @@ class AuthViewModel(
                 authListener?.onFailure(e.message!!)
             } catch (e: NoInternetException) {
                 authListener?.onFailure(e.message!!)
-            }
+            }*/
         }
     }
 
