@@ -1,7 +1,9 @@
 package com.codefrnd.mvvmapp.ui.auth
 
+import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
+import com.codefrnd.mvvmapp.data.db.entities.User
 import com.codefrnd.mvvmapp.data.repository.UserRepository
 import com.codefrnd.mvvmapp.uitl.ApiException
 import com.codefrnd.mvvmapp.uitl.Coroutines
@@ -12,8 +14,10 @@ class AuthViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
 
+    var name: String? = null
     var email: String? = null
     var password: String? = null
+    var passwordConfirm: String? = null
 
     var authListener: AuthListener? = null
 
@@ -28,14 +32,6 @@ class AuthViewModel(
             return
         }
 
-        /** BAD PRACTICE
-         * WE SHOULD NOT CREATE INSTANCE OTH OTHER CLASSES RESULTING IN TIGHT COUPLING
-         * USE DI
-         * */
-
-        /*val loginResponse = UserRepository().userLogin(email!!, password!!)
-        authListener?.onSuccess(loginResponse)*/
-
         Coroutines.main {
             try {
                 val authResponse = repository.userLogin(email!!, password!!)
@@ -49,9 +45,66 @@ class AuthViewModel(
                 authListener?.onFailure(e.message!!)
             } catch (e: ConnectException) {
                 authListener?.onFailure(e.message!!)
-            } catch (e : NoInternetException) {
+            } catch (e: NoInternetException) {
                 authListener?.onFailure(e.message!!)
             }
+        }
+    }
+
+    fun onSignUpButtonClick(view: View) {
+        authListener?.onStarted()
+
+        if (name.isNullOrEmpty()) {
+            authListener?.onFailure("Name is required.")
+            return
+        }
+
+        if (email.isNullOrEmpty()) {
+            authListener?.onFailure("Email is required.")
+            return
+        }
+
+        if (password.isNullOrEmpty()) {
+            authListener?.onFailure("Password is required.")
+            return
+        }
+
+        if (password != passwordConfirm) {
+            authListener?.onFailure("Password did not match.")
+            return
+        }
+
+        val currTime = System.currentTimeMillis().toString()
+        var demoUser = User(name, email, password, currTime, currTime, currTime)
+
+        Coroutines.main {
+            try {
+                val authResponse = repository.userSignUp(name!!, email!!, password!!)
+                authResponse.user?.let {
+                    authListener?.onSuccess(it)
+                    repository.saveUser(it)
+                    return@main
+                }
+                authListener?.onFailure(authResponse.message!!)
+            } catch (e: ApiException) {
+                authListener?.onFailure(e.message!!)
+            } catch (e: ConnectException) {
+                authListener?.onFailure(e.message!!)
+            } catch (e: NoInternetException) {
+                authListener?.onFailure(e.message!!)
+            }
+        }
+    }
+
+    fun onSignUp(view: View) {
+        Intent(view.context, SignUpActivity::class.java).also {
+            view.context.startActivity(it)
+        }
+    }
+
+    fun onLogin(view: View) {
+        Intent(view.context, LoginActivity::class.java).also {
+            view.context.startActivity(it)
         }
     }
 }
