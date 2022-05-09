@@ -8,6 +8,11 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.codefrnd.mvvmapp.ui.home.profile.ProfileFragment"
-        android:label="profile_fragment"
+        android:label="Profile"
         tools:layout="@layout/profile_fragment" />
+    <fragment
+        android:id="@+id/quotesFragment"
+        android:name="com.codefrnd.mvvmapp.ui.home.quotes.QuotesFragment"
+        android:label="quotes_fragment"
+        tools:layout="@layout/quotes_fragment" />
 </navigation>
