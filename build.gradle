@@ -2,6 +2,8 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         def nav_version = "2.4.2"
@@ -18,3 +20,10 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+/*
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}*/
